@@ -1,0 +1,16 @@
+tags:
+  environment: dev-1
+  project: aws-infra-cdk
+  owner: my-team
+
+vpc:
+  name: cdk-test-dev-1
+  cidr: 20.0.0.0/16
+  max_azs: 3
+  nat_gateways: 0
+  public_subnet:
+    enabled: true
+    cidr_mask: 24
+  private_subnet:
+    enabled: false
+    cidr_mask: 24

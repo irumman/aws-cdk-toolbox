@@ -1,0 +1,36 @@
+tags:
+  environment: dev
+  project: project-1
+  owner: my-team
+
+vpc:
+  name: cdk-test
+  cidr: 20.0.0.0/16
+  max_azs: 3
+  nat_gateways: 0
+  public_subnet:
+    enabled: true
+    cidr_mask: 24
+  private_subnet:
+    enabled: false
+    cidr_mask: 24
+
+security_groups:
+  - name: web-access
+    description: Allow HTTP and HTTPS from anywhere
+    ingress_rules:
+      - from_port: 80
+        to_port: 80
+        protocol: tcp
+        cidr: 0.0.0.0/0
+        description: HTTP
+      - from_port: 443
+        to_port: 443
+        protocol: tcp
+        cidr: 0.0.0.0/0
+        description: HTTPS
+      - from_port: 22
+        to_port: 22
+        protocol: tcp
+        cidr: 0.0.0.0/0
+        description: ssh

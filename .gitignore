@@ -201,7 +201,19 @@ cython_debug/
 .cursorignore
 .cursorindexingignore
 
+# AWS CDK
+cdk.context.json
+
 # Marimo
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# idea
+.idea
+
+# tmp
+tmp
+
+# cdk.out
+cdk.out
