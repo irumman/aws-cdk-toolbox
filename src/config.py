@@ -7,17 +7,17 @@ from pydantic_settings import BaseSettings
 
 
 class SubnetConfig(BaseModel):
-    enabled: bool
-    cidr_mask: int
+    enabled: bool = False
+    cidr_mask: int = 24
 
 
 class VpcConfig(BaseModel):
-    name: str
-    cidr: str
-    max_azs: int
-    nat_gateways: int
-    public_subnet: SubnetConfig
-    private_subnet: SubnetConfig
+    name: str = ""
+    cidr: str = ""
+    max_azs: int = 2
+    nat_gateways: int = 0
+    public_subnet: SubnetConfig = SubnetConfig(enabled=True, cidr_mask=24)
+    private_subnet: SubnetConfig = SubnetConfig(enabled=False, cidr_mask=24)
 
 
 class SecurityGroupIngressRuleConfig(BaseModel):
@@ -38,10 +38,19 @@ class SecurityGroupConfig(BaseModel):
     ingress_rules: list[SecurityGroupIngressRuleConfig] = []
 
 
+class ApplicationLoadBalancerConfig(BaseModel):
+    enabled: bool = False
+
+
+class LoadBalancerConfig(BaseModel):
+    application: ApplicationLoadBalancerConfig = ApplicationLoadBalancerConfig()
+
+
 class AppConfig(BaseSettings):
-    tags: dict[str, str]
-    vpc: VpcConfig
+    tags: dict[str, str] = {}
+    vpc: VpcConfig = VpcConfig()
     security_groups: list[SecurityGroupConfig] = []
+    load_balancer: LoadBalancerConfig = LoadBalancerConfig()
 
     model_config = {"env_nested_delimiter": "__"}
 
@@ -49,5 +58,5 @@ class AppConfig(BaseSettings):
 def load_config(env: str) -> AppConfig:
     config_path = Path(__file__).parent.parent / "config" / f"{env}.yaml"
     with open(config_path) as f:
-        data: dict[str, Any] = yaml.safe_load(f)
+        data: dict[str, Any] = yaml.safe_load(f) or {}
     return AppConfig(**data)

@@ -8,9 +8,5 @@ vpc:
   cidr: 20.0.0.0/16
   max_azs: 3
   nat_gateways: 3
-  public_subnet:
-    enabled: true
-    cidr_mask: 24
   private_subnet:
     enabled: true
-    cidr_mask: 24
