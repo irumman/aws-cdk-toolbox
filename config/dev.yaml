@@ -7,13 +7,6 @@ vpc:
   name: cdk-test
   cidr: 20.0.0.0/16
   max_azs: 3
-  nat_gateways: 0
-  public_subnet:
-    enabled: true
-    cidr_mask: 24
-  private_subnet:
-    enabled: false
-    cidr_mask: 24
 
 security_groups:
   - name: web-access
@@ -29,8 +22,7 @@ security_groups:
         protocol: tcp
         cidr: 0.0.0.0/0
         description: HTTPS
-      - from_port: 22
-        to_port: 22
-        protocol: tcp
-        cidr: 0.0.0.0/0
-        description: ssh
+
+load_balancer:
+  application:
+    enabled: true

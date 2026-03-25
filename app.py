@@ -8,7 +8,7 @@ from aws_cdk import Aspects
 from src.aspects.check_ssh_open_aspects import CheckSshOpenAspect
 from src.aspects.display_construct_path import DisplayConstructPathAspect
 from src.config import load_config
-from src.stacks import NetworkStack
+from src.stacks import ProjectStack
 
 app = cdk.App()
 
@@ -17,6 +17,9 @@ app.node.set_context(
     "@aws-cdk/aws-ec2:vpcAttributeIsListTokenavailabilityZones",
     True,
 )
+# Suppress routeTableId warnings from AlbStack subnets built via from_subnet_attributes.
+# An ALB only needs subnet IDs/AZs; route table access is never required.
+app.node.set_context("@aws-cdk/aws-ec2:noSubnetRouteTableId", True)
 
 env_name = os.getenv("ENV", "dev")
 config = load_config(env_name)
@@ -25,7 +28,7 @@ env = cdk.Environment(
     region=os.getenv("CDK_DEFAULT_REGION"),
 )
 
-NetworkStack(
+ProjectStack(
     app,
     f"{config.tags['project']}-{env_name}",
     config=config,
